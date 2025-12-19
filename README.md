@@ -29,3 +29,7 @@ cd soc-log-anomaly-detector
 python detector.py
 Failed password for invalid user admin from 192.168.1.10
 ⚠️ Anomaly detected: failed password, invalid user
+## Open Source Contributions
+
+This project is part of ACWOC and welcomes beginner contributions.
+Check the Issues section to get started.
