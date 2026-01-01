@@ -33,3 +33,7 @@ Failed password for invalid user admin from 192.168.1.10
 
 This project is part of ACWOC and welcomes beginner contributions.
 Check the Issues section to get started.
+### 🔐 Current Focus
+- Cybersecurity tooling in Python
+- Beginner-friendly open-source projects
+- Log analysis and threat detection
