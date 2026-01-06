@@ -27,3 +27,37 @@ if __name__ == "__main__":
             print("⚠️ Anomaly detected:", ", ".join(anomalies))
         else:
             print("✔️ Log looks normal")
+def detect_anomalies(log):
+    log = log.lower()
+    findings = []
+
+    if "failed password" in log:
+        findings.append(("Failed password attempt", "MEDIUM"))
+
+    if "invalid user" in log:
+        findings.append(("Invalid user login attempt", "HIGH"))
+
+    if "unauthorized access" in log:
+        findings.append(("Unauthorized access attempt", "HIGH"))
+
+    if "connection closed" in log:
+        findings.append(("Suspicious connection closure", "LOW"))
+
+    return findings
+
+
+def analyze_log(log):
+    results = detect_anomalies(log)
+
+    if not results:
+        return "✔️ No anomalies detected."
+
+    output = "⚠️ Anomalies detected:\n"
+    for issue, severity in results:
+        output += f"- [{severity}] {issue}\n"
+
+    return output
+
+
+log_entry = input("Enter SOC log entry: ")
+print(analyze_log(log_entry))
