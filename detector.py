@@ -7,26 +7,6 @@ SUSPICIOUS_PATTERNS = [
     "unauthorized access",
     "permission denied"
 ]
-
-def detect_anomalies(log_line):
-    log_line = log_line.lower()
-    matches = [p for p in SUSPICIOUS_PATTERNS if p in log_line]
-    return matches
-
-if __name__ == "__main__":
-    print("SOC Log Anomaly Detector")
-    print("Enter log lines (type 'exit' to quit):")
-
-    while True:
-        log = input("> ")
-        if log.lower() == "exit":
-            break
-
-        anomalies = detect_anomalies(log)
-        if anomalies:
-            print("⚠️ Anomaly detected:", ", ".join(anomalies))
-        else:
-            print("✔️ Log looks normal")
 def detect_anomalies(log):
     log = log.lower()
     findings = []
@@ -50,14 +30,24 @@ def analyze_log(log):
     results = detect_anomalies(log)
 
     if not results:
-        return "✔️ No anomalies detected."
+        return "✔️ Log looks normal"
 
     output = "⚠️ Anomalies detected:\n"
     for issue, severity in results:
-        output += f"- [{severity}] {issue}\n"
-
+        marker = "🔴" if severity == "HIGH" else "🟡" if severity == "MEDIUM" else "🟢"
+        output += f"{marker} [{severity}] {issue}\n"
+    
     return output
 
+if __name__ == "__main__":
+    print("SOC Log Anomaly Detector")
+    print("Enter log lines (type 'exit' to quit):")
 
-log_entry = input("Enter SOC log entry: ")
-print(analyze_log(log_entry))
+    while True:
+        log = input("> ")
+        if log.lower() == "exit":
+            break
+
+        print(analyze_log(log))
+
+    
