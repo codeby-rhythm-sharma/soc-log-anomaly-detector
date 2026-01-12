@@ -1,27 +1,18 @@
-import re
+SUSPICIOUS_PATTERNS = {
+    "failed password": ("Failed password attempt", "MEDIUM"),
+    "authentication failure": ("Authentication failure", "MEDIUM"),
+    "invalid user": ("Invalid user login attempt", "HIGH"),
+    "unauthorized access": ("Unauthorized access attempt", "HIGH"),
+    "permission denied": ("Permission denied", "LOW"),
+}
 
-SUSPICIOUS_PATTERNS = [
-    "failed password",
-    "authentication failure",
-    "invalid user",
-    "unauthorized access",
-    "permission denied"
-]
 def detect_anomalies(log):
     log = log.lower()
     findings = []
 
-    if "failed password" in log:
-        findings.append(("Failed password attempt", "MEDIUM"))
-
-    if "invalid user" in log:
-        findings.append(("Invalid user login attempt", "HIGH"))
-
-    if "unauthorized access" in log:
-        findings.append(("Unauthorized access attempt", "HIGH"))
-
-    if "connection closed" in log:
-        findings.append(("Suspicious connection closure", "LOW"))
+    for pattern, (message, severity) in SUSPICIOUS_PATTERNS.items():
+        if pattern in log:
+            findings.append((message, severity))
 
     return findings
 
@@ -36,8 +27,9 @@ def analyze_log(log):
     for issue, severity in results:
         marker = "🔴" if severity == "HIGH" else "🟡" if severity == "MEDIUM" else "🟢"
         output += f"{marker} [{severity}] {issue}\n"
-    
+
     return output
+
 
 if __name__ == "__main__":
     print("SOC Log Anomaly Detector")
@@ -49,5 +41,4 @@ if __name__ == "__main__":
             break
 
         print(analyze_log(log))
-
-    
+        
