@@ -1,15 +1,21 @@
 # SOC Log Anomaly Detector 🛡️
 
-A beginner-friendly cybersecurity tool designed to detect suspicious patterns in Security Operations Center (SOC) log entries using simple rule-based analysis.
+A beginner-friendly cybersecurity project that detects suspicious patterns in SOC (Security Operations Center) log entries using simple rule-based analysis. This project is designed for students who are new to security monitoring and log analysis.
 
 ---
 
 ## 🚀 Features
 
-* **Pattern Recognition**: Automatically detects common security threats like "failed password", "unauthorized access", and "invalid user".
-* **Severity Grading**: Categorizes anomalies by severity (LOW, MEDIUM, HIGH).
-* **Beginner Friendly**: Simple, readable Python code easy to understand and extend.
-* **Interactive CLI**: Run the tool directly from your terminal.
+- Detects common suspicious log patterns
+- Handles authentication failures and unauthorized access attempts
+- Simple and readable Python code
+- Easy to extend with new detection rules
+
+---
+
+## 💻 Tech Stack
+
+- Python
 
 ---
 
@@ -26,36 +32,19 @@ The tool scans logs for specific keywords and assigns a severity level:
 
 ---
 
-## 🛠️ Setup & Installation
-
-Follow these steps to get the project running on your local machine.
-
-### 1. Prerequisites
-You need **Python 3.x** installed. You can check if you have it by running:
-
-```bash
-python --version
-# OR
-python3 --version
-```
-
-### 2. Clone the Repository
+## 💻 How to Run
 
 Open your terminal and run the following commands to download the project:
 ```bash
-git clone [https://github.com/codeby-rhythm-sharma/soc-log-anomaly-detector.git](https://github.com/codeby-rhythm-sharma/soc-log-anomaly-detector.git)
+git clone https://github.com/codeby-rhythm-sharma/soc-log-anomaly-detector.git
 cd soc-log-anomaly-detector
 ```
----
-
-## 💻 How to Run
 
 Once you are inside the project folder, you can run the detector using Python:
 
 ```bash
 python detector.py
 ```
-Note: If your system uses python3 by default, use python3 detector.py.
 
 ---
 
@@ -72,8 +61,7 @@ Jun 14 10:05:22 server sshd[2042]: Invalid user admin from 192.168.1.5
 
 Output :
 ```Plaintext
-⚠️ Anomalies detected:
-- [HIGH] Invalid user login attempt
+⚠️ Anomaly detected: invalid user
 ```
 
 ### Example 2: Medium Severity Alert
@@ -85,8 +73,7 @@ Failed password for user root at 10:00 PM
 
 Output:
 ```Plaintext
-⚠️ Anomalies detected:
-- [MEDIUM] Failed password attempt
+⚠️ Anomaly detected: failed password
 ```
 
 ### Example 3: Normal Log (No Anomaly)
@@ -98,22 +85,24 @@ System restart successful at 09:00 AM
 
 Output:
 ```Plaintext
-✔️ No anomalies detected.
+✔️ Log looks normal
 ```
 
 ---
 
-## 🤝 How to Contribute
-We welcome contributions, especially from ACWOC participants!
+## 🔐 Current Focus
+- Cybersecurity tooling in Python
+- Beginner-friendly open-source projects
+- Log analysis and threat detection
 
-Please read our CONTRIBUTION GUIDE before you start. It contains important rules about creating branches, commit messages, and pull requests.
+---
 
-Quick Start for Contributors:
+## 🤝 Open Source Contributions
+
+This project is part of ACWOC and welcomes beginner contributions.
 
 - Check the Issues tab for tasks labeled good first issue or beginner.
-
 - Comment on the issue to get it assigned to you.
-
 - Fork the repo, make your changes, and submit a Pull Request (PR).
 
 ---
