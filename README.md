@@ -52,9 +52,7 @@ python detector.py
 
 ## 📝 Usage & Examples
 
-When you run the script, it will ask you to input a log entry. Here are some examples of how the tool analyzes different logs.
-
-### Example 1: High Severity Alert
+When you run the script, it will ask you to input a log entry. Here is a example of how the tool analyzes different logs.
 
 Input:
 ```Plaintext
