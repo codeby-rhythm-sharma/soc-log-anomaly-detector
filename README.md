@@ -37,6 +37,8 @@ The tool scans logs for specific keywords and assigns a severity level:
 Open your terminal and run the following commands to download the project:
 ```bash
 git clone https://github.com/codeby-rhythm-sharma/soc-log-anomaly-detector.git
+```
+```bash
 cd soc-log-anomaly-detector
 ```
 
@@ -56,36 +58,12 @@ When you run the script, it will ask you to input a log entry. Here are some exa
 
 Input:
 ```Plaintext
-Jun 14 10:05:22 server sshd[2042]: Invalid user admin from 192.168.1.5
+Failed password for invalid user admin from 192.168.1.10
 ```
 
 Output :
 ```Plaintext
-⚠️ Anomaly detected: invalid user
-```
-
-### Example 2: Medium Severity Alert
-
-Input: 
-```Plaintext 
-Failed password for user root at 10:00 PM
-```
-
-Output:
-```Plaintext
-⚠️ Anomaly detected: failed password
-```
-
-### Example 3: Normal Log (No Anomaly)
-
-Input:
-```Plaintext
-System restart successful at 09:00 AM
-```
-
-Output:
-```Plaintext
-✔️ Log looks normal
+⚠️ Anomaly detected: failed password, invalid user
 ```
 
 ---
