@@ -4,6 +4,7 @@ SUSPICIOUS_PATTERNS = {
     "invalid user": ("Invalid user login attempt", "HIGH"),
     "unauthorized access": ("Unauthorized access attempt", "HIGH"),
     "permission denied": ("Permission denied", "LOW"),
+    "connection closed": ("Suspicious connection closure", "LOW"),
 }
 
 def detect_anomalies(log):
@@ -41,4 +42,4 @@ if __name__ == "__main__":
             break
 
         print(analyze_log(log))
-        
+
