@@ -1,13 +1,11 @@
-## SOC Log Anomaly Detector
+# SOC Log Anomaly Detector 🛡️
 
-A beginner-friendly cybersecurity project that detects suspicious
-patterns in SOC (Security Operations Center) log entries using simple
-rule-based analysis. This project is designed for students who are
-new to security monitoring and log analysis.
+A beginner-friendly cybersecurity project that detects suspicious patterns in SOC (Security Operations Center) log entries using simple rule-based analysis. This project is designed for students who are new to security monitoring and log analysis.
 
 ---
 
-## Features
+## 🚀 Features
+
 - Detects common suspicious log patterns
 - Handles authentication failures and unauthorized access attempts
 - Simple and readable Python code
@@ -15,25 +13,90 @@ new to security monitoring and log analysis.
 
 ---
 
-## Tech Stack
+## 💻 Tech Stack
+
 - Python
 
 ---
 
-## How to Run
+## 🧠 Detection Logic
 
-1. Clone the repository:
+The tool scans logs for specific keywords and assigns a severity level:
+
+| Keyword / Pattern | Severity | Description |
+| :--- | :--- | :--- |
+| `invalid user` | **HIGH** 🔴 | Attempts to login with non-existent users |
+| `unauthorized access` | **HIGH** 🔴 | Access attempts without proper permissions |
+| `failed password` | **MEDIUM** 🟠 | Incorrect password attempts |
+| `connection closed` | **LOW** 🟡 | Unexpected or suspicious disconnections |
+
+---
+
+## 💻 How to Run
+
+Open your terminal and run the following commands to download the project:
 ```bash
 git clone https://github.com/codeby-rhythm-sharma/soc-log-anomaly-detector.git
+```
+```bash
 cd soc-log-anomaly-detector
-python detector.py
-Failed password for invalid user admin from 192.168.1.10
-⚠️ Anomaly detected: failed password, invalid user
-## Open Source Contributions
+```
 
-This project is part of ACWOC and welcomes beginner contributions.
-Check the Issues section to get started.
-### 🔐 Current Focus
+Once you are inside the project folder, you can run the detector using Python:
+
+```bash
+python detector.py
+```
+
+---
+
+## 📝 Usage & Examples
+
+When you run the script, it will ask you to input a log entry. Here is a example of how the tool analyzes different logs.
+
+Input:
+```Plaintext
+Failed password for invalid user admin from 192.168.1.10
+```
+
+Output :
+```Plaintext
+⚠️ Anomaly detected: failed password, invalid user
+```
+
+---
+
+## 🔐 Current Focus
 - Cybersecurity tooling in Python
 - Beginner-friendly open-source projects
 - Log analysis and threat detection
+
+---
+
+## 🤝 Open Source Contributions
+
+This project is part of ACWOC and welcomes beginner contributions.
+
+- Check the Issues tab for tasks labeled good first issue or beginner.
+- Comment on the issue to get it assigned to you.
+- Fork the repo, make your changes, and submit a Pull Request (PR).
+
+---
+
+## 📜 License
+
+This project is open-source and available for educational purposes.
+
+---
+
+## ❓ Troubleshooting
+
+**Q: I get a `command not found` error.**
+
+A: Try using `python3` instead of `python`.
+
+**Q: How do I stop the program?**
+
+A: Type `exit` when asked for a log entry, or press `Ctrl + C` on your keyboard to force quit.
+
+---
