@@ -1,0 +1,15 @@
+# Create this file in same directory as your Python script
+cat > sample_soc_logs.txt << 'EOF'
+2026-01-15 10:20:01 User john logged in successfully from 192.168.1.10 ✔️
+2026-01-15 10:20:02 Successful connection established to database server
+2026-01-15 10:20:03 User alice accessed /reports/dashboard (normal access)
+2026-01-15 10:20:10 Failed password for invalid user from 203.0.113.5
+2026-01-15 10:20:11 Authentication failure for user 'admin' from 203.0.113.5
+2026-01-15 10:20:15 Permission denied: /root/secrets.txt access attempt
+2026-01-15 10:20:20 Unauthorized access attempt to /admin panel
+2026-01-15 10:20:21 Failed password for invalid user from 203.0.113.5
+2026-01-15 10:20:22 Failed password for invalid user from 203.0.113.5
+2026-01-15 10:20:23 Connection closed by peer after suspicious activity
+2026-01-15 10:25:01 Normal HTTP request from 192.168.1.20
+2026-01-15 10:25:02 User bob accessed shared documents (normal)
+EOF
