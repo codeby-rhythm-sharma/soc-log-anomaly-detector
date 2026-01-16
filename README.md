@@ -116,4 +116,7 @@ A: Try using `python3` instead of `python`.
 **Q: How do I stop the program?**
 A: Type `exit` when asked for a log entry, or press `Ctrl + C` on your keyboard.
 
----
+## ⚠️ Notice
+This is the official repository maintained by @codeby-rhythm-sharma.
+Any forks are community copies and are not officially maintained.
+
