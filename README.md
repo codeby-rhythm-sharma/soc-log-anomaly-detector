@@ -127,3 +127,20 @@ A sample SOC log file (`sample_soc_logs.csv`) is provided in the `sample_logs` f
 1. Navigate to the `sample_logs` folder.
 2. Use the `sample_soc_logs.csv` file as input for the anomaly detection tool.
 3. Run the tool to see how anomalies are detected.
+## Sample SOC Logs
+
+A sample SOC log file is provided in the `sample_logs/` directory to help first-time users understand the expected log format and test the detector.
+
+### How to use:
+1. Run the detector:
+   ```bash
+   python detector.py
+
+## Sample SOC Logs
+
+A sample SOC log file is provided in the `sample_logs/` directory to help first-time users understand the expected log format and test the detector.
+
+### How to use:
+1. Run the detector:
+   ```bash
+   python detector.py
