@@ -120,3 +120,27 @@ A: Type `exit` when asked for a log entry, or press `Ctrl + C` on your keyboard.
 This is the official repository maintained by @codeby-rhythm-sharma.
 Any forks are community copies and are not officially maintained.
 
+## Sample SOC Log File
+A sample SOC log file (`sample_soc_logs.csv`) is provided in the `sample_logs` folder. This file contains both normal and suspicious log entries to help users understand the expected log format and test the anomaly detection tool.
+
+### How to Use:
+1. Navigate to the `sample_logs` folder.
+2. Use the `sample_soc_logs.csv` file as input for the anomaly detection tool.
+3. Run the tool to see how anomalies are detected.
+## Sample SOC Logs
+
+A sample SOC log file is provided in the `sample_logs/` directory to help first-time users understand the expected log format and test the detector.
+
+### How to use:
+1. Run the detector:
+   ```bash
+   python detector.py
+
+## Sample SOC Logs
+
+A sample SOC log file is provided in the `sample_logs/` directory to help first-time users understand the expected log format and test the detector.
+
+### How to use:
+1. Run the detector:
+   ```bash
+   python detector.py
