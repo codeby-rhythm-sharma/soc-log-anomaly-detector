@@ -101,14 +101,14 @@ This project is part of ACWOC and welcomes beginner contributions.
 - Fork the repo, make your changes, and submit a Pull Request (PR).
 
 ---
-⭐ If you find this project useful, please consider giving it a star!
-It helps the project grow and motivates maintenance.
 
 ## 📜 License
 
 This project is open-source and available for educational purposes.
 
 ---
+⭐ If you find this project useful, please consider giving it a star!
+It helps the project grow and motivates maintenance.
 
 ## ❓ Troubleshooting
 
