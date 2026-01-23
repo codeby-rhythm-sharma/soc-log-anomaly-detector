@@ -101,6 +101,8 @@ This project is part of ACWOC and welcomes beginner contributions.
 - Fork the repo, make your changes, and submit a Pull Request (PR).
 
 ---
+⭐ If you find this project useful, please consider giving it a star!
+It helps the project grow and motivates maintenance.
 
 ## 📜 License
 
