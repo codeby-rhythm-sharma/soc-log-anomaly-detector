@@ -67,6 +67,8 @@ python config_gui.py
    ```
 
 ---
+## Testing
+python -m unittest discover tests
 
 ## 📝 Usage & Examples
 
