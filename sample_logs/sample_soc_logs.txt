@@ -1,0 +1,63 @@
+# Sample SOC Logs for Testing
+# Use these logs to manually test the anomaly detector
+
+# ---------- NORMAL ACTIVITY ----------
+User john logged in successfully from 192.168.1.10
+System startup completed successfully
+SSH connection established from 10.0.0.5
+User alice logged out normally
+
+# ---------- SUSPICIOUS ACTIVITY ----------
+Failed password for invalid user admin from 203.0.113.45
+Invalid user login attempt detected
+Multiple failed login attempts from 203.0.113.45
+
+# ---------- HIGH RISK / ATTACK PATTERNS ----------
+Failed password for root from 198.51.100.23
+Invalid user login attempt
+Invalid user login attempt
+Invalid user login attempt
+
+# ---------- NORMAL AGAIN ----------
+Backup completed successfully
+Cron job executed without errors
+
+## Sample SOC Logs
+
+A sample SOC log file is provided in the `sample_logs/` directory to help first-time users understand the expected log format and test the detector.
+
+### How to use:
+1. Run the detector:
+   ```bash
+   python detector.py
+2.Copy and paste individual log lines from:
+        sample_logs/sample_soc_logs.txt
+3.Observe the anomaly alerts printed in the terminal.
+    
+---
+
+### 5️⃣ SAVE karna MAT bhoolna ❗
+- Keyboard: **Ctrl + S**
+- Tab ke upar ● (dot) hata hua hona chahiye
+
+---
+
+### 6️⃣ Close README.md
+- `X` click karo ya tab close
+
+---
+
+## 🧠 Agar ab bhi confusion ho to ye check kar
+README.md ke last me **“Sample SOC Logs”** heading dikh rahi hai?  
+👉 Haan = kaam ho gaya  
+👉 Nahi = paste galat jagah hua
+
+---
+
+## 🛑 AB STOP
+
+Is step ke baad:
+- ❌ Terminal me kuch aur mat likho
+- ❌ Git commands mat chalao
+
+---
