@@ -133,6 +133,8 @@ How to stop the detector?**
 Type `exit` or press `Ctrl + C`
 
 ---
+⭐ If you find this project useful, please consider giving it a star!
+It helps the project grow and motivates maintenance.
 
 📜 License
 
