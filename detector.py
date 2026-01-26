@@ -52,6 +52,8 @@ def load_rules(config_path="rules.json"):
         "MEDIUM": "🟡",
         "LOW": "🟢"
     }
+
+    entropy_threshold=3.5
     
     #Load external configuration if it exists
     if os.path.exists(config_path):
@@ -73,6 +75,11 @@ def load_rules(config_path="rules.json"):
                             "threshold": details.get("threshold", 1),
                             "threshold_severity": details.get("threshold_severity", details.get("severity", "LOW"))
                         }
+
+            # Load entropy threshold if provided            
+            if "entropy_threshold" in config:
+                entropy_threshold = config["entropy_threshold"]         
+        
         except (json.JSONDecodeError, IOError):
             #Fallback to defaults if config fails to load 
             print(f"⚠️ Warning: Could not read {config_path}. Using internal defaults.")
@@ -82,7 +89,7 @@ def load_rules(config_path="rules.json"):
 class AnomalyDetector:
     """Rule-based SOC log anomaly detector."""
     def __init__(self, config_path="rules.json"):
-        self.patterns, self.severity_levels = load_rules(config_path)
+        self.patterns, self.severity_levels, self.entropy_threshold = load_rules(config_path)
         self.counts = {pattern: 0 for pattern in self.patterns}
 
     def detect_anomalies(self, log):

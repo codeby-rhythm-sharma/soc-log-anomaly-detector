@@ -28,6 +28,8 @@ class ConfigGUI:
         #Load existing configuration
         self.rules = self.load_config()
 
+        self.entropy_var=tk.DoubleVar(value=self.rules.get("entropy_threshold",3.5))
+
         #Setup UI styles and layout
         self.setup_styles()
         self.setup_ui()
@@ -74,6 +76,8 @@ class ConfigGUI:
     def save_config(self):
         """Save current rules to json file."""
         try:
+
+            self.rules["entropy_threshold"]=self.entropy_var.get()
             with open(CONFIG_FILE, "w") as f:
                 json.dump(self.rules, f, indent=4)
             messagebox.showinfo("Success", "Configuration saved successfully!")
@@ -156,9 +160,14 @@ class ConfigGUI:
         self.t_severity_combo = ttk.Combobox(edit_frame, textvariable=self.t_severity_var, values=list(self.rules["severity_levels"].keys()), width=32)
         self.t_severity_combo.grid(row=9, column=0, pady=(0, 10), sticky=tk.W)
 
+        #Entropy Threshold input
+        ttk.Label(edit_frame, text="Entropy Threshold:").grid(row=10,column=0,sticky=tk.W,pady=(0,2))
+        self.entropy_entry= ttk.Entry(edit_frame, textvariable=self.entropy_var, width=35)
+        self.entropy_entry.grid(row=11, column=0,pady=(0,10),sticky=tk.W)
+        
         # Buttons
         btn_frame = ttk.Frame(edit_frame)
-        btn_frame.grid(row=10, column=0, pady=(20, 0))
+        btn_frame.grid(row=12, column=0, pady=(20, 0))
 
         ttk.Button(btn_frame, text="Add/Update", command=self.save_rule).pack(side=tk.LEFT, padx=5)
         ttk.Button(btn_frame, text="Delete", command=self.delete_rule).pack(side=tk.LEFT, padx=5)
