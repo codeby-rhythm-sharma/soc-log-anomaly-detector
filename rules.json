@@ -26,7 +26,10 @@
         },
         "unauthorized access": {
             "message": "Unauthorized access attempt",
-            "severity": "HIGH"
+            "severity": "HIGH",
+            "threshold": 1,
+            "threshold_severity": "HIGH",
+            "time_window": 0
         },
         "permission denied": {
             "message": "Permission denied",
