@@ -129,14 +129,9 @@ class AnomalyDetector:
 
     def detect_anomalies(self, log):
         """
-        Detects anomalies in log entries with input validation.
-        Empty or malformed log lines are safely skipped without affecting counts.
+        Detects anomalies in log entries.
+        Assumes input is already validated by analyze_log.
         """
-        # Issue #5: Input validation - Skip invalid log entries safely
-        is_valid, log = self.validate_log_entry(log)
-        if not is_valid:
-            return []  # Return empty findings for invalid/empty logs (no crash)
-        
         log = log.lower()
         findings = []
 
@@ -203,10 +198,5 @@ if __name__ == "__main__":
         
         if log.lower().strip() == "exit":
             break
-        
-        # Issue #5: Friendly handling of empty lines in interactive mode
-        if not log.strip():
-            print("⏭️  Empty line detected. Please enter a log entry or type 'exit' to quit.")
-            continue
 
         print(analyze_log(log))
