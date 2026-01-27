@@ -77,8 +77,59 @@ class AnomalyDetector:
     def __init__(self, config_path="rules.json"):
         self.patterns, self.severity_levels = load_rules(config_path)
         self.counts = {pattern: 0 for pattern in self.patterns}
+    
+    def validate_log_entry(self, log):
+        """
+        Validates log entry to prevent crashes from unexpected or malformed input.
+        
+        Issue #5: Add basic input validation for log entries
+        - Skips empty or whitespace-only lines (handles "", " ", "\n")
+        - Handles non-string types safely (converts to string or rejects)
+        - Prevents crashes due to bad input (None types, bytes with errors)
+        
+        Args:
+            log: Input log entry (any type - str, bytes, None, int, etc.)
+            
+        Returns:
+            tuple: (is_valid: bool, cleaned_log: str or None)
+                   Returns (False, None) if input should be skipped
+                   Returns (True, cleaned_string) if input is valid
+        """
+        # Check for None input (prevents AttributeError on .lower())
+        if log is None:
+            return False, None
+        
+        # Ensure it's a string (handles numbers, objects, bytes safely)
+        if not isinstance(log, str):
+            try:
+                # Handle bytes with encoding errors gracefully
+                if isinstance(log, bytes):
+                    log = log.decode('utf-8', errors='ignore')
+                else:
+                    log = str(log)
+            except Exception:
+                # If conversion fails (very malformed input), treat as invalid
+                return False, None
+        
+        # Remove leading/trailing whitespace
+        cleaned = log.strip()
+        
+        # Check for empty string after stripping (handles "", "   ", "\t", "\n")
+        if not cleaned:
+            return False, None
+            
+        return True, cleaned
 
     def detect_anomalies(self, log):
+        """
+        Detects anomalies in log entries with input validation.
+        Empty or malformed log lines are safely skipped without affecting counts.
+        """
+        # Issue #5: Input validation - Skip invalid log entries safely
+        is_valid, log = self.validate_log_entry(log)
+        if not is_valid:
+            return []  # Return empty findings for invalid/empty logs (no crash)
+        
         log = log.lower()
         findings = []
 
@@ -100,7 +151,16 @@ class AnomalyDetector:
         return findings
 
     def analyze_log(self, log):
-        results = self.detect_anomalies(log)
+        """
+        Analyzes log entry and returns formatted result.
+        Handles empty/invalid input gracefully with user-friendly messages.
+        """
+        # Issue #5: Input validation - Handle unexpected input gracefully
+        is_valid, cleaned_log = self.validate_log_entry(log)
+        if not is_valid:
+            return "⏭️  Skipped empty or invalid log entry."
+        
+        results = self.detect_anomalies(cleaned_log)
 
         if not results:
             return "✔️ Log looks normal"
@@ -115,6 +175,7 @@ class AnomalyDetector:
 detector = AnomalyDetector()
 
 def analyze_log(log):
+    """Module-level convenience function"""
     return detector.analyze_log(log)
 
 if __name__ == "__main__":
@@ -122,9 +183,19 @@ if __name__ == "__main__":
     print("Enter log lines (type 'exit' to quit):")
 
     while True:
-        log = input("> ")
-        if log.lower() == "exit":
+        try:
+            log = input("> ")
+        except (EOFError, KeyboardInterrupt):
+            # Issue #5: Prevent crashes from Ctrl+C or Ctrl+D (beginner-friendly)
+            print("\n👋 Exiting...")
             break
+        
+        if log.lower().strip() == "exit":
+            break
+        
+        # Issue #5: Friendly handling of empty lines in interactive mode
+        if not log.strip():
+            print("⏭️  Empty line detected. Please enter a log entry or type 'exit' to quit.")
+            continue
 
         print(analyze_log(log))
-
