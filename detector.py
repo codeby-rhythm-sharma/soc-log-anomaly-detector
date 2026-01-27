@@ -2,8 +2,11 @@ import json
 import os
 
 def load_rules(config_path="rules.json"):
-    """Loads detection rules and severity levels from a JSON file."""
+    """Loads detection rules and severity levels from a JSON file.
+       Falls back to internal defaults if the file is missing or invalid.
+    """
     # Internal defaults used only if config file is missing or empty
+    #Default suspicious patterns  
     patterns = {
         "failed password": {
             "message": "Failed password attempt",
@@ -43,12 +46,14 @@ def load_rules(config_path="rules.json"):
         }
     }
     
+    #Severity level to emoji mapping
     severity_levels = {
         "HIGH": "🔴",
         "MEDIUM": "🟡",
         "LOW": "🟢"
     }
-
+    
+    #Load external configuration if it exists
     if os.path.exists(config_path):
         try:
             with open(config_path, "r") as f:
@@ -69,27 +74,34 @@ def load_rules(config_path="rules.json"):
                             "threshold_severity": details.get("threshold_severity", details.get("severity", "LOW"))
                         }
         except (json.JSONDecodeError, IOError):
+            #Fallback to defaults if config fails to load 
             print(f"⚠️ Warning: Could not read {config_path}. Using internal defaults.")
     
     return patterns, severity_levels
 
 class AnomalyDetector:
+    """Rule-based SOC log anomaly detector."""
     def __init__(self, config_path="rules.json"):
         self.patterns, self.severity_levels = load_rules(config_path)
         self.counts = {pattern: 0 for pattern in self.patterns}
 
     def detect_anomalies(self, log):
+        """
+        Check a log entry for suspicious patterns.
+        """
         log = log.lower()
         findings = []
 
+        #Scan log for each known pattern
         for pattern, config in self.patterns.items():
             if pattern in log:
-                self.counts[pattern] += 1
+                self.counts[pattern] += 1  #Increment occurrence count
                 
                 message = config["message"]
                 severity = config["severity"]
                 threshold = config["threshold"]
-                
+
+                #Escalate severity if threshold is reached
                 if self.counts[pattern] >= threshold:
                     severity = config["threshold_severity"]
                     if threshold > 1:
@@ -100,6 +112,9 @@ class AnomalyDetector:
         return findings
 
     def analyze_log(self, log):
+        """
+        Analyze a log entry and return formatted results.
+        """
         results = self.detect_anomalies(log)
 
         if not results:
@@ -111,13 +126,16 @@ class AnomalyDetector:
             output += f"{marker} [{severity}] {issue}\n"
 
         return output
-
+    
+#Global detector instance
 detector = AnomalyDetector()
 
 def analyze_log(log):
+    """Wrapper for analyzing logs using the global detector."""
     return detector.analyze_log(log)
 
 if __name__ == "__main__":
+    #CLI entry point 
     print("SOC Log Anomaly Detector")
     print("Enter log lines (type 'exit' to quit):")
 
