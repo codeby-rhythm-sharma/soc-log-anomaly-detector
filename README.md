@@ -1,126 +1,143 @@
-# SOC Log Anomaly Detector 🛡️
+# SOC Log Anomaly Detector
 
-A beginner-friendly cybersecurity project that detects suspicious patterns in SOC (Security Operations Center) log entries using rule-based analysis. This project now features a configurable detection system and a modern GUI for rule management.
+A cybersecurity project that detects suspicious patterns in SOC (Security Operations Center) log entries using rule-based analysis. The project includes a configurable detection system and a GUI for managing detection rules.
 
----
+## Features
 
-## 🚀 Features
+- **Configurable Detection** — Define custom keywords, patterns, and alert messages
+- **Dynamic Severity Mapping** — Custom severity levels with visual indicators
+- **Threshold-Based Escalation** — Automatically escalates alerts after repeated matches
+- **Dark Mode GUI** — Interface for SOC-style workflows
+- **Robust Fallbacks** — Uses safe defaults if configuration files are missing
 
-- **Configurable Detection**: Define custom keywords, patterns, and alert messages.
-- **Dynamic Severity Mapping**: Fully customizable severity levels and visual markers (emojis).
-- **Threshold-Based Escalation**: Automatically escalate severity based on the number of occurrences (e.g., multiple failed logins).
-- **Dark Mode GUI**: A modern, easy-to-use configuration tool for managing your detection rules.
-- **Robust Fallback**: Uses sensible internal defaults if configuration files are missing.
+## Tech Stack
 
----
+- Python
+- tkinter (GUI)
 
-## 💻 Tech Stack
+## Detection Logic
 
-- Python (with `tkinter` for GUI)
+The detector scans log entries using rules defined in `rules.json`.
 
----
+Each rule includes:
 
-## 🧠 Detection Logic
+| Field | Description |
+|-------|-------------|
+| Pattern | Keyword or phrase to match |
+| Message | Alert description |
+| Severity | Initial alert level (LOW / MEDIUM / HIGH) |
+| Threshold | Number of matches required |
+| Threshold Severity | Severity after threshold escalation |
 
-The tool scans logs for patterns defined in `rules.json`. Each rule can have:
-- **Pattern**: The keyword to look for.
-- **Message**: The alert description displayed to the analyst.
-- **Severity**: The initial alert level (e.g., LOW, MEDIUM, HIGH).
-- **Threshold**: Number of matches required before escalation.
-- **Threshold Severity**: The alert level used once the threshold is met.
+## Rule Configuration (GUI)
 
----
-
-## 🛠️ Configuration (GUI)
-
-You can manage all your rules visually using the provided configuration tool:
+Launch the configuration interface:
 
 ```bash
 python config_gui.py
 ```
 
-### GUI Features:
-- **+ New Rule**: Clear the editor to create a fresh detection rule.
-- **Dark Mode**: Designed for modern SOC analyst workflows.
-- **Instant Persistence**: Save changes directly to `rules.json`.
+Features:
 
----
+- Create and edit detection rules
+- Dark mode interface
+- Instant save to `rules.json`
 
-## 💻 How to Run
+## Installation
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/codeby-rhythm-sharma/soc-log-anomaly-detector.git
-   cd soc-log-anomaly-detector
-   ```
+```bash
+git clone https://github.com/codeby-rhythm-sharma/soc-log-anomaly-detector.git
+cd soc-log-anomaly-detector
+```
 
-2. **(Optional) Configure Rules**:
-   Launch the GUI to add or modify detection patterns:
-   ```bash
-   python config_gui.py
-   ```
+## Usage
 
-3. **Run the Detector**:
-   Start analyzing log entries:
-   ```bash
-   python detector.py
-   ```
+1. (Optional) Configure rules via GUI:
 
----
-## Testing
-python -m unittest discover tests
+```bash
+python config_gui.py
+```
 
-## 📝 Usage & Examples
+2. Run the detector:
 
-Input:
-```Plaintext
+```bash
+python detector.py
+```
+
+Enter log entries manually or paste log lines. Type `exit` to stop.
+
+## Example
+
+**Input:**
+```
 Failed password for invalid user admin from 192.168.1.10
 ```
 
-Output:
-```Plaintext
+**Output:**
+```
 ⚠️ Anomalies detected:
 🟡 [MEDIUM] Failed password attempt
 🔴 [HIGH] Invalid user login attempt
 ```
 
-*Note: If thresholds are set, the output will reflect the escalated severity and match count.*
+Severity escalates based on configured thresholds.
 
----
+## Sample Logs
 
-## 🔐 Current Focus
-- Cybersecurity tooling in Python
-- Beginner-friendly open-source projects
-- Log analysis and threat detection
+Sample SOC log files are provided in the `sample_logs/` directory:
 
----
+- Contains raw log entries only
+- Includes normal, suspicious, and attack-like logs
+- Useful for testing detection behavior
 
-## 🤝 Open Source Contributions
+To use:
+1. Navigate to `sample_logs/`
+2. Copy log lines into the detector input
+3. Observe detection results
 
-This project is part of ACWOC and welcomes beginner contributions.
+## Contributing
 
-- Check the Issues tab for tasks labeled `good first issue` or `beginner`.
-- Fork the repo, make your changes, and submit a Pull Request (PR).
+Contributions are welcome.
 
----
+1. Check Issues labeled `good first issue` or `beginner`
+2. Fork the repository
+3. Create a feature branch
+4. Submit a Pull Request
 
-## 📜 License
+## Troubleshooting
 
-This project is open-source and available for educational purposes.
+| Issue | Solution |
+|-------|----------|
+| `command not found` | Use `python3` instead of `python` |
+| Stop the detector | Type `exit` or press `Ctrl + C` |
+
+## License
+
+<<<<<<< HEAD
+Command not found?**
+Use `python3` instead of `python`
+
+How to stop the detector?**
+Type `exit` or press `Ctrl + C`
 
 ---
 ⭐ If you find this project useful, please consider giving it a star!
 It helps the project grow and motivates maintenance.
 
-## ❓ Troubleshooting
+📜 License
 
-**Q: I get a `command not found` error.**
-A: Try using `python3` instead of `python`.
+Open-source and intended for **educational purposes**.
 
-**Q: How do I stop the program?**
-A: Type `exit` when asked for a log entry, or press `Ctrl + C` on your keyboard.
+---
 
-## ⚠️ Notice
-This is the official repository maintained by @codeby-rhythm-sharma.
-Any forks are community copies and are not officially maintained.
+⚠️ Notice
 
+This is the **official repository** maintained by **@codeby-rhythm-sharma**.
+Community forks are not officially maintained.
+=======
+Open-source. Intended for educational purposes.
+>>>>>>> fba78b6 (docs: clean README and remove casual language)
+
+## Notice
+
+This is the official repository maintained by [@codeby-rhythm-sharma](https://github.com/codeby-rhythm-sharma). Community forks are not officially maintained.
