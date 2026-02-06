@@ -1,69 +1,34 @@
 import json
 import os
+import re
+from datetime import datetime
 
 def load_rules(config_path="rules.json"):
-    """Loads detection rules and severity levels from a JSON file.
-       Falls back to internal defaults if the file is missing or invalid.
-    """
-    # Internal defaults used only if config file is missing or empty
-    #Default suspicious patterns  
+    """Loads detection rules and severity levels from a JSON file."""
+    # Internal defaults
     patterns = {
         "failed password": {
             "message": "Failed password attempt",
             "severity": "MEDIUM",
-            "threshold": 1,
-            "threshold_severity": "MEDIUM"
-        },
-        "authentication failure": {
-            "message": "Authentication failure",
-            "severity": "MEDIUM",
-            "threshold": 1,
-            "threshold_severity": "MEDIUM"
-        },
-        "invalid user": {
-            "message": "Invalid user login attempt",
-            "severity": "HIGH",
-            "threshold": 1,
-            "threshold_severity": "HIGH"
-        },
-        "unauthorized access": {
-            "message": "Unauthorized access attempt",
-            "severity": "HIGH",
-            "threshold": 1,
-            "threshold_severity": "HIGH"
-        },
-        "permission denied": {
-            "message": "Permission denied",
-            "severity": "LOW",
-            "threshold": 1,
-            "threshold_severity": "LOW"
-        },
-        "connection closed": {
-            "message": "Suspicious connection closure",
-            "severity": "LOW",
-            "threshold": 1,
-            "threshold_severity": "LOW"
+            "threshold": 3,
+            "threshold_severity": "HIGH",
+            "time_window": 60
         }
     }
     
-    #Severity level to emoji mapping
     severity_levels = {
+        "CRITICAL": "🔥",
         "HIGH": "🔴",
         "MEDIUM": "🟡",
         "LOW": "🟢"
     }
-    
-    #Load external configuration if it exists
+
     if os.path.exists(config_path):
         try:
             with open(config_path, "r") as f:
                 config = json.load(f)
-                
-                # Load severity levels if provided
                 if "severity_levels" in config:
                     severity_levels = config["severity_levels"]
-                
-                # Load patterns if provided
                 if "suspicious_patterns" in config:
                     patterns = {}
                     for pattern, details in config["suspicious_patterns"].items():
@@ -71,132 +36,151 @@ def load_rules(config_path="rules.json"):
                             "message": details.get("message", "Unknown anomaly"),
                             "severity": details.get("severity", "LOW"),
                             "threshold": details.get("threshold", 1),
-                            "threshold_severity": details.get("threshold_severity", details.get("severity", "LOW"))
+                            "threshold_severity": details.get("threshold_severity", details.get("severity", "LOW")),
+                            "time_window": details.get("time_window", 60)  # Default 60s window
                         }
         except (json.JSONDecodeError, IOError):
-            #Fallback to defaults if config fails to load 
             print(f"⚠️ Warning: Could not read {config_path}. Using internal defaults.")
     
     return patterns, severity_levels
 
 class AnomalyDetector:
-    """Rule-based SOC log anomaly detector."""
     def __init__(self, config_path="rules.json"):
         self.patterns, self.severity_levels = load_rules(config_path)
-        self.counts = {pattern: 0 for pattern in self.patterns}
-    
+        # Store timestamp history for each pattern: {pattern_name: [datetime_objects]}
+        self.event_history = {pattern: [] for pattern in self.patterns}
+        # Regex for common ISO-like timestamp: 2024-05-20 14:30:05
+        self.timestamp_regex = re.compile(r'^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})')
+
+    def parse_timestamp(self, log_entry):
+        """Extracts and parses timestamp from the log entry."""
+        match = self.timestamp_regex.search(log_entry)
+        if match:
+            try:
+                return datetime.strptime(match.group(1), "%Y-%m-%d %H:%M:%S")
+            except ValueError:
+                return None
+        return None
+
     def validate_log_entry(self, log):
-        """
-        Validates log entry to prevent crashes from unexpected or malformed input.
-        
-        Issue #5: Add basic input validation for log entries
-        - Skips empty or whitespace-only lines (handles "", " ", "\n")
-        - Handles non-string types safely (converts to string or rejects)
-        - Prevents crashes due to bad input (None types, bytes with errors)
-        
-        Args:
-            log: Input log entry (any type - str, bytes, None, int, etc.)
-            
-        Returns:
-            tuple: (is_valid: bool, cleaned_log: str or None)
-                   Returns (False, None) if input should be skipped
-                   Returns (True, cleaned_string) if input is valid
-        """
-        # Check for None input (prevents AttributeError on .lower())
-        if log is None:
-            return False, None
-        
-        # Ensure it's a string (handles numbers, objects, bytes safely)
+        """Basic validation for log entries."""
+        if log is None: return False, None
         if not isinstance(log, str):
             try:
-                # Handle bytes with encoding errors gracefully
-                if isinstance(log, bytes):
-                    log = log.decode('utf-8', errors='ignore')
-                else:
-                    log = str(log)
-            except Exception:
-                # If conversion fails (very malformed input), treat as invalid
-                return False, None
+                log = log.decode('utf-8', errors='ignore') if isinstance(log, bytes) else str(log)
+            except: return False, None
         
-        # Remove leading/trailing whitespace
         cleaned = log.strip()
-        
-        # Check for empty string after stripping (handles "", "   ", "\t", "\n")
-        if not cleaned:
+        if not cleaned or cleaned.startswith("#"): # Skip comments
             return False, None
-            
         return True, cleaned
 
     def detect_anomalies(self, log):
-        """
-        Detects anomalies in log entries.
-        Assumes input is already validated by analyze_log.
-        """
-        log = log.lower()
+        """Detects anomalies using a sliding time window."""
+        current_time = self.parse_timestamp(log)
+        
+        # If no timestamp is present, we can't do time-window detection accurately.
+        # For simplicity, we'll use the current system time if missing.
+        if not current_time:
+            current_time = datetime.now()
+
+        log_lower = log.lower()
         findings = []
 
-        #Scan log for each known pattern
         for pattern, config in self.patterns.items():
-            if pattern in log:
-                self.counts[pattern] += 1  #Increment occurrence count
+            if pattern in log_lower:
+                # Add the current event's timestamp to our history for this pattern
+                self.event_history[pattern].append(current_time)
                 
-                message = config["message"]
-                severity = config["severity"]
-                threshold = config["threshold"]
+                # MAINTAIN SLIDING WINDOW: This is the core logic.
+                # We only keep timestamps that are within the 'time_window' (e.g., last 60 seconds).
+                # Anything older than (current_time - window) is removed.
+                window_seconds = config["time_window"]
+                if window_seconds > 0:
+                    self.event_history[pattern] = [
+                        ts for ts in self.event_history[pattern] 
+                        if (current_time - ts).total_seconds() <= window_seconds
+                    ]
+                
+                # Count how many matches are LEFT in our window
+                count = len(self.event_history[pattern])
 
-                #Escalate severity if threshold is reached
-                if self.counts[pattern] >= threshold:
+                threshold = config["threshold"]
+                
+                if count >= threshold:
+                    message = config["message"]
                     severity = config["threshold_severity"]
                     if threshold > 1:
-                        message = f"{message} (Threshold reached: {self.counts[pattern]} matches)"
-                
-                findings.append((message, severity))
+                        message = f"{message} ({count} occurrences in {window_seconds}s)"
+                    findings.append((message, severity))
+                elif count > 0:
+                    # Optional: Log that a suspicious event occurred but threshold not met
+                    # For now, let's only report when threshold is hit or if threshold is 1
+                    if threshold <= 1:
+                        findings.append((config["message"], config["severity"]))
 
         return findings
 
     def analyze_log(self, log):
-        """
-        Analyzes log entry and returns formatted result.
-        Handles empty/invalid input gracefully with user-friendly messages.
-        """
-        # Issue #5: Input validation - Handle unexpected input gracefully
+        """Analyzes log entry and returns formatted result."""
         is_valid, cleaned_log = self.validate_log_entry(log)
         if not is_valid:
-            return "⏭️  Skipped empty or invalid log entry."
+            return None # Silent skip for empty/invalid
         
         results = self.detect_anomalies(cleaned_log)
 
         if not results:
-            return "✔️ Log looks normal"
+            return f"✔️ [Normal] {cleaned_log[:50]}..."
 
-        output = "⚠️ Anomalies detected:\n"
+        output = f"⚠️ Anomalies detected in: {cleaned_log[:50]}...\n"
         for issue, severity in results:
             marker = self.severity_levels.get(severity, "⚪")
-            output += f"{marker} [{severity}] {issue}\n"
+            output += f"   {marker} [{severity}] {issue}\n"
 
         return output
-    
-#Global detector instance
+
 detector = AnomalyDetector()
 
 def analyze_log(log):
-    """Module-level convenience function"""
     return detector.analyze_log(log)
 
+def process_file(file_path):
+    """Processes a log file line by line."""
+    if not os.path.exists(file_path):
+        print(f"File not found: {file_path}")
+        return
+
+    print(f"\n--- Analyzing Log File: {os.path.basename(file_path)} ---")
+    with open(file_path, "r") as f:
+        # Sort logs chronologically if they have timestamps
+        lines = [line.strip() for line in f if line.strip()]
+        
+        # Simple heuristic: if most lines have timestamps, we can sort
+        # However, real logs are usually chronological. 
+        # For a "beginner-friendly" approach, we'll process them in order.
+        
+        for line in lines:
+            result = analyze_log(line)
+            if result:
+                print(result)
+
 if __name__ == "__main__":
-    #CLI entry point 
-    print("SOC Log Anomaly Detector")
-    print("Enter log lines (type 'exit' to quit):")
+    print("SOC Log Anomaly Detector (Timestamp Aware)")
+    print("1. Enter logs manually")
+    print("2. Analyze sample_logs/timestamped_logs.txt")
+    print("Type 'exit' to quit.")
 
     while True:
-        try:
-            log = input("> ")
-        except (EOFError, KeyboardInterrupt):
-            # Issue #5: Prevent crashes from Ctrl+C or Ctrl+D (beginner-friendly)
-            print("\n👋 Exiting...")
+        choice = input("\nSelect an option (1/2/exit): ").strip().lower()
+        if choice == '1':
+            print("Enter log lines (e.g., '2026-02-06 22:40:05 - failed password'):")
+            while True:
+                log = input("> ")
+                if log.lower().strip() == "exit": break
+                print(analyze_log(log))
+        elif choice == '2':
+            process_file("sample_logs/timestamped_logs.txt")
+        elif choice == 'exit':
             break
-        
-        if log.lower().strip() == "exit":
-            break
-
-        print(analyze_log(log))
+        else:
+            print("Invalid choice.")

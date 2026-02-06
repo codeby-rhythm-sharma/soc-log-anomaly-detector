@@ -1,28 +1,31 @@
 {
     "severity_levels": {
-        "CRITICAL": "\u00f0\u0178\u201d\u00a5",
-        "HIGH": "\u00f0\u0178\u201d\u00b4",
-        "MEDIUM": "\u00f0\u0178\u0178\u00a1",
-        "LOW": "\u00f0\u0178\u0178\u00a2"
+        "CRITICAL": "🔥",
+        "HIGH": "🔴",
+        "MEDIUM": "🟡",
+        "LOW": "🟢"
     },
     "suspicious_patterns": {
         "failed password": {
             "message": "Failed password attempt",
             "severity": "MEDIUM",
             "threshold": 3,
-            "threshold_severity": "HIGH"
+            "threshold_severity": "HIGH",
+            "time_window": 60
         },
         "authentication failure": {
             "message": "Authentication failure",
             "severity": "LOW",
-            "threshold": 1,
-            "threshold_severity": "CRITICAL"
+            "threshold": 5,
+            "threshold_severity": "CRITICAL",
+            "time_window": 300
         },
         "invalid user": {
             "message": "Invalid user login attempt",
             "severity": "HIGH",
             "threshold": 2,
-            "threshold_severity": "CRITICAL"
+            "threshold_severity": "CRITICAL",
+            "time_window": 120
         },
         "unauthorized access": {
             "message": "Unauthorized access attempt",
@@ -33,11 +36,17 @@
         },
         "permission denied": {
             "message": "Permission denied",
-            "severity": "LOW"
+            "severity": "LOW",
+            "threshold": 3,
+            "threshold_severity": "MEDIUM",
+            "time_window": 60
         },
         "connection closed": {
             "message": "Suspicious connection closure",
-            "severity": "LOW"
+            "severity": "LOW",
+            "threshold": 2,
+            "threshold_severity": "MEDIUM",
+            "time_window": 30
         }
     }
 }

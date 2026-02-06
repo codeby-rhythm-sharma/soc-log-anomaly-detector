@@ -156,9 +156,15 @@ class ConfigGUI:
         self.t_severity_combo = ttk.Combobox(edit_frame, textvariable=self.t_severity_var, values=list(self.rules["severity_levels"].keys()), width=32)
         self.t_severity_combo.grid(row=9, column=0, pady=(0, 10), sticky=tk.W)
 
+        # Time Window input
+        ttk.Label(edit_frame, text="Time Window (Seconds):").grid(row=10, column=0, sticky=tk.W, pady=(0, 2))
+        self.time_window_var = tk.IntVar(value=60)
+        self.time_window_spin = ttk.Spinbox(edit_frame, from_=0, to=3600, textvariable=self.time_window_var, width=33)
+        self.time_window_spin.grid(row=11, column=0, pady=(0, 10), sticky=tk.W)
+
         # Buttons
         btn_frame = ttk.Frame(edit_frame)
-        btn_frame.grid(row=10, column=0, pady=(20, 0))
+        btn_frame.grid(row=12, column=0, pady=(20, 0))
 
         ttk.Button(btn_frame, text="Add/Update", command=self.save_rule).pack(side=tk.LEFT, padx=5)
         ttk.Button(btn_frame, text="Delete", command=self.delete_rule).pack(side=tk.LEFT, padx=5)
@@ -180,6 +186,7 @@ class ConfigGUI:
         self.severity_var.set("LOW")
         self.threshold_var.set(1)
         self.t_severity_var.set("LOW")
+        self.time_window_var.set(60)
         self.pattern_entry.focus_set()
 
     def on_rule_select(self, event):
@@ -193,6 +200,7 @@ class ConfigGUI:
             self.severity_var.set(config.get("severity", "LOW"))
             self.threshold_var.set(config.get("threshold", 1))
             self.t_severity_var.set(config.get("threshold_severity", config.get("severity", "LOW")))
+            self.time_window_var.set(config.get("time_window", 60))
        
     def save_rule(self):
         """Add or update a rule in memory """
@@ -205,6 +213,8 @@ class ConfigGUI:
             "message": self.message_var.get(),
             "severity": self.severity_var.get(),
             "threshold": self.threshold_var.get(),
+            "threshold_severity": self.t_severity_var.get(),
+            "time_window": self.time_window_var.get()
             }
         self.refresh_listbox()
         messagebox.showinfo("Success", f"Rule for '{pattern}' updated locally. Don't forget to 'Save All to File'.")
