@@ -1,4 +1,4 @@
-# SOC Log Anomaly Detector
+# SOC Log Anomaly Detector ⚠️️🔍
 
 A cybersecurity project that detects suspicious patterns in SOC (Security Operations Center) log entries using rule-based analysis. The project includes a configurable detection system and a GUI for managing detection rules.
 
