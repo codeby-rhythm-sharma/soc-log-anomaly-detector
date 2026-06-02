@@ -1,143 +1,251 @@
-# SOC Log Anomaly Detector ⚠️️🔍
+<div align="center">
 
-A cybersecurity project that detects suspicious patterns in SOC (Security Operations Center) log entries using rule-based analysis. The project includes a configurable detection system and a GUI for managing detection rules.
+# SOC Log Anomaly Detector  ⚠️️🔍
 
-## Features
+### Detection Engineering Framework for Security Monitoring & Threat Analysis
 
-- **Configurable Detection** — Define custom keywords, patterns, and alert messages
-- **Dynamic Severity Mapping** — Custom severity levels with visual indicators
-- **Threshold-Based Escalation** — Automatically escalates alerts after repeated matches
-- **Dark Mode GUI** — Interface for SOC-style workflows
-- **Robust Fallbacks** — Uses safe defaults if configuration files are missing
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=21&pause=2600&color=C8A27C&center=true&vCenter=true&width=950&lines=Detection+Engineering+Workflows;SOC+Monitoring+and+Alert+Analysis;Rule-Based+Threat+Detection;Security+Event+Classification;Open+Source+Maintained+Project" />
 
-## Tech Stack
+<br>
 
-- Python
-- tkinter (GUI)
+<img src="https://img.shields.io/badge/Threat%20Detection-Rule%20Based-C8A27C?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Alerting-Severity%20Classification-black?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/SOC-Workflow%20Simulation-C8A27C?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Open%20Source-Project%20Maintainer-black?style=for-the-badge"/>
 
-## Detection Logic
+</div>
 
-The detector scans log entries using rules defined in `rules.json`.
+---
 
-Each rule includes:
+## Overview
 
-| Field | Description |
-|-------|-------------|
-| Pattern | Keyword or phrase to match |
-| Message | Alert description |
-| Severity | Initial alert level (LOW / MEDIUM / HIGH) |
-| Threshold | Number of matches required |
-| Threshold Severity | Severity after threshold escalation |
+SOC Log Anomaly Detector is a security monitoring and detection-engineering framework designed to identify suspicious activity patterns within system and authentication logs through configurable rule-based analysis.
 
-## Rule Configuration (GUI)
+The project simulates core Security Operations Center (SOC) workflows by analyzing security events, classifying threat severity, generating alerts, and escalating repeated suspicious behavior through threshold-based detection mechanisms.
 
-Launch the configuration interface:
+Built with flexibility and extensibility in mind, the framework enables security practitioners, students, and contributors to experiment with detection logic, alert prioritization, and incident-monitoring workflows in a practical environment.
 
-```bash
-python config_gui.py
+---
+
+## Detection Highlights
+
+| Capability              | Implementation                      |
+| ----------------------- | ----------------------------------- |
+| Threat Detection        | Rule-Based Security Event Analysis  |
+| Alerting                | Configurable Alert Generation       |
+| Severity Classification | LOW • MEDIUM • HIGH                 |
+| Escalation Logic        | Threshold-Based Severity Escalation |
+| Detection Rules         | Dynamic JSON-Based Configuration    |
+| Monitoring Workflow     | SOC-Oriented Event Analysis         |
+| Contributor Support     | Open Source Maintained Project      |
+
+---
+
+## Detection Workflow
+
+```text
+Security Log Entry
+        │
+        ▼
+Pattern Matching Engine
+        │
+        ▼
+Rule Validation
+        │
+        ▼
+Severity Classification
+        │
+        ▼
+Threshold Evaluation
+        │
+        ▼
+Alert Generation
+        │
+        ▼
+Escalated Security Event
 ```
 
-Features:
+The framework processes incoming log events, evaluates them against configurable detection rules, assigns an initial severity level, and automatically escalates alerts when repeated suspicious activity exceeds defined thresholds.
 
-- Create and edit detection rules
-- Dark mode interface
-- Instant save to `rules.json`
+---
 
-## Installation
+## Core Detection Engine
 
-```bash
-git clone https://github.com/codeby-rhythm-sharma/soc-log-anomaly-detector.git
-cd soc-log-anomaly-detector
-```
+### Rule-Based Threat Detection
 
-## Usage
+* Detects suspicious behavior through configurable pattern-matching rules
+* Supports security-event identification without modifying application code
+* Enables rapid experimentation with custom detection logic
 
-1. (Optional) Configure rules via GUI:
+### Severity Classification
 
-```bash
-python config_gui.py
-```
+* Categorizes alerts into LOW, MEDIUM, and HIGH severity levels
+* Improves analyst visibility into potentially malicious activity
+* Supports structured alert prioritization workflows
 
-2. Run the detector:
+### Threshold-Based Escalation
 
-```bash
-python detector.py
-```
+* Tracks repeated occurrences of suspicious behavior
+* Automatically increases severity when detection thresholds are exceeded
+* Simulates realistic SOC alert-management workflows
 
-Enter log entries manually or paste log lines. Type `exit` to stop.
+### Dynamic Rule Configuration
 
-## Example
+* Detection rules are managed through a centralized JSON configuration
+* Supports customizable patterns, alert messages, thresholds, and severity mappings
+* Allows security analysts to refine detection behavior efficiently
 
-**Input:**
-```
+---
+
+## Security Monitoring Use Cases
+
+### Authentication Monitoring
+
+Detect failed login attempts, invalid-user activity, and repeated authentication failures.
+
+### Threat Hunting Workflows
+
+Identify suspicious indicators and recurring attack patterns through log inspection.
+
+### Security Operations Center (SOC) Simulation
+
+Model real-world alerting and incident-monitoring workflows within a controlled environment.
+
+### Detection Engineering Practice
+
+Design, test, and improve detection logic using configurable rule sets and escalation strategies.
+
+---
+
+## Example Detection Scenario
+
+### Input Log
+
+```text
 Failed password for invalid user admin from 192.168.1.10
 ```
 
-**Output:**
+### Detection Output
+
+```text
+[MEDIUM] Failed Password Attempt
+[HIGH] Invalid User Login Attempt
 ```
-⚠️ Anomalies detected:
-🟡 [MEDIUM] Failed password attempt
-🔴 [HIGH] Invalid user login attempt
+
+Repeated occurrences automatically trigger threshold-based severity escalation according to configured detection policies.
+
+---
+
+## Detection Rule Structure
+
+Each rule consists of:
+
+| Component          | Purpose                                |
+| ------------------ | -------------------------------------- |
+| Pattern            | Keyword or event signature to detect   |
+| Message            | Alert generated when matched           |
+| Severity           | Initial alert classification           |
+| Threshold          | Required occurrences before escalation |
+| Threshold Severity | Severity after threshold breach        |
+
+This design enables flexible and extensible security-event monitoring without modifying core detection logic.
+
+---
+
+## Technology Stack
+
+### Detection & Analysis
+
+* Rule-Based Detection
+* Pattern Matching
+* Alert Classification
+* Threshold Escalation Logic
+
+### Development
+
+* Python
+* JSON Configuration Management
+
+### Interface & Configuration
+
+* Tkinter GUI
+* Dynamic Rule Management
+* Security Workflow Configuration
+
+---
+
+## Repository Structure
+
+```text
+soc-log-anomaly-detector/
+│
+├── sample_logs/                 # Sample security logs
+├── detector.py                  # Detection engine
+├── config_gui.py                # Rule configuration interface
+├── rules.json                   # Detection rule definitions
+├── README.md
+└── LICENSE
 ```
 
-Severity escalates based on configured thresholds.
+---
 
-## Sample Logs
+## Open Source Maintenance
 
-Sample SOC log files are provided in the `sample_logs/` directory:
+This repository was actively maintained as part of community-driven open-source initiatives, providing contributors with opportunities to participate in security-focused software development and collaborative engineering practices.
 
-- Contains raw log entries only
-- Includes normal, suspicious, and attack-like logs
-- Useful for testing detection behavior
+Project maintenance responsibilities included:
 
-To use:
-1. Navigate to `sample_logs/`
-2. Copy log lines into the detector input
-3. Observe detection results
+* Reviewing and merging community pull requests
+* Managing contributor workflows and project issues
+* Improving project documentation and onboarding
+* Supporting beginner contributors during open-source programs
+* Maintaining code quality and repository structure
+* Guiding feature enhancements and project improvements
 
-## Contributing
+The project served as both a security-engineering initiative and a collaborative open-source learning environment.
 
-Contributions are welcome.
+---
 
-1. Check Issues labeled `good first issue` or `beginner`
-2. Fork the repository
-3. Create a feature branch
-4. Submit a Pull Request
+## Future Enhancements
 
-## Troubleshooting
+* Regex-Based Detection Rules
+* MITRE ATT&CK Technique Mapping
+* Multi-Source Log Ingestion
+* SIEM-Inspired Monitoring Dashboard
+* Statistical Anomaly Detection Models
+* Security Event Correlation Engine
+* Threat Intelligence Feed Integration
 
-| Issue | Solution |
-|-------|----------|
-| `command not found` | Use `python3` instead of `python` |
-| Stop the detector | Type `exit` or press `Ctrl + C` |
+---
+
+## Contributors
+
+### Project Maintainer
+
+**Rhythm Sharma**
+
+### Community Contributors
+
+Contributions from open-source participants helped improve functionality, documentation, and overall project quality.
+
+---
 
 ## License
 
-<<<<<<< HEAD
-Command not found?**
-Use `python3` instead of `python`
-
-How to stop the detector?**
-Type `exit` or press `Ctrl + C`
-
----
-⭐ If you find this project useful, please consider giving it a star!
-It helps the project grow and motivates maintenance.
-
-📜 License
-
-Open-source and intended for **educational purposes**.
+Licensed under the MIT License.
 
 ---
 
-⚠️ Notice
+<div align="center">
 
-This is the **official repository** maintained by **@codeby-rhythm-sharma**.
-Community forks are not officially maintained.
-=======
-Open-source. Intended for educational purposes.
->>>>>>> fba78b6 (docs: clean README and remove casual language)
+### Detection Engineering • Security Monitoring • Open Source Collaboration
 
-## Notice
+<br>
 
-This is the official repository maintained by [@codeby-rhythm-sharma](https://github.com/codeby-rhythm-sharma). Community forks are not officially maintained.
+<a href="https://github.com/codeby-rhythm-sharma">
+<img src="https://img.shields.io/badge/More%20Security%20Projects-C8A27C?style=for-the-badge&logo=github&logoColor=black"/>
+</a>
+
+</div>
+
+
